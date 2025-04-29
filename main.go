@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math/rand/v2"
+	"strings"
 )
 
 type account struct {
@@ -12,6 +13,7 @@ type account struct {
 }
 
 func main() {
+	fmt.Println(generatePassword(10))
 	fmt.Println(rand.IntN(10))
 
 	login := promptData("Введите логин: ")
@@ -40,6 +42,16 @@ func outputPassword(acc *account) {
 	fmt.Println(acc.login, acc.password, acc.URL)
 }
 
-func generatePassword(n int) string {
-	rand.
+func generatePassword(n int) (str string) {
+	chars := []rune("ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ" +
+		"abcdefghijklmnopqrstuvwxyzåäö" +
+		"0123456789")
+	var b strings.Builder
+	for i := 0; i < n; i++ {
+		b.WriteRune(chars[rand.IntN(len(chars))])
+	}
+
+	str = b.String()
+	return str
+
 }
