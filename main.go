@@ -9,40 +9,17 @@ import (
 type account struct {
 	login    string
 	password string
-	URL      string
+	url      string
 }
 
-func main() {
-	fmt.Println(generatePassword(10))
-	fmt.Println(rand.IntN(10))
-
-	login := promptData("Введите логин: ")
-	password := promptData("Введите пароль: ")
-	url := promptData("Ввведите URL: ")
-
-	myAccount := account{
-		login:    login,
-		password: password,
-		URL:      url,
-	}
-
-	outputPassword(&myAccount)
-}
-
-func promptData(prompt string) string {
-	fmt.Print(prompt)
-	var res string
-	fmt.Scan(&res)
-	return res
-}
-
-func outputPassword(acc *account) {
+func (acc *account) outputPassword() {
 	fmt.Println(acc)
 	acc.login = "123"
-	fmt.Println(acc.login, acc.password, acc.URL)
+	fmt.Println(acc.login, acc.password, acc.url)
 }
 
-func generatePassword(n int) (str string) {
+func (acc *account) generatePassword(n int) {
+	var str string
 	chars := []rune("ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ" +
 		"abcdefghijklmnopqrstuvwxyzåäö" +
 		"0123456789")
@@ -52,6 +29,33 @@ func generatePassword(n int) (str string) {
 	}
 
 	str = b.String()
-	return str
+	acc.password = str
 
+}
+
+func newAccount(login, password, url string) *account {
+	return &account{
+		url:      url,
+		login:    login,
+		password: password,
+	}
+}
+
+func main() {
+
+	login := promptData("Введите логин: ")
+	password := promptData("Введите пароль: ")
+	url := promptData("Ввведите URL: ")
+
+	myAccount := new(login, password, url)
+	myAccount.generatePassword(12)
+	myAccount.outputPassword()
+	fmt.Println(myAccount)
+}
+
+func promptData(prompt string) string {
+	fmt.Print(prompt + ": ")
+	var res string
+	fmt.Scan(&res)
+	return res
 }
